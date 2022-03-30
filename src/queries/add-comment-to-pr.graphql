@@ -1,7 +1,19 @@
-mutation AddCommentToPr($pullRequestId: ID!) {
+mutation AddRebaseCommentToPr($pullRequestId: ID!) {
   addComment(input: {
     subjectId: $pullRequestId,
     body: "@dependabot rebase",
+  }) {
+    commentEdge {
+      node {
+        id
+      }
+    }
+  }
+}
+mutation AddRecreateCommentToPr($pullRequestId: ID!) {
+  addComment(input: {
+    subjectId: $pullRequestId,
+    body: "@dependabot recreate",
   }) {
     commentEdge {
       node {

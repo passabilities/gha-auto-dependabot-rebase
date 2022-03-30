@@ -1,11 +1,12 @@
-import { setFailed } from '@actions/core';
+import { getInput, setFailed } from '@actions/core';
 import * as github from '@actions/github';
 import { Octokit } from '@octokit/core';
 import { Maybe, PullRequestEdge } from '@octokit/graphql-schema';
 
 import { PullRequestEdges } from './@types';
 import {
-  AddCommentToPr,
+  AddRebaseCommentToPr,
+  AddRecreateCommentToPr,
   GetPullRequests,
   Repository,
 } from './generated/graphql';
@@ -36,7 +37,16 @@ async function addCommentToPullRequest(
   ok: Octokit,
   pr: Maybe<PullRequestEdge>
 ): Promise<void> {
-  const query = AddCommentToPr.loc!.source!.body;
+  let query: string;
+  const command = getInput('command');
+  if (command === 'rebase') {
+    query = AddRebaseCommentToPr.loc!.source!.body;
+  } else if (command === 'recreate') {
+    query = AddRecreateCommentToPr.loc!.source!.body;
+  } else {
+    throw new Error('Invalid Dependabot command');
+  }
+  
   if (pr?.node?.id && isDependabotPullRequest(pr)) {
     console.info(
       `Requesting rebase of PR #${pr.node.number} '${pr.node.title}'`
