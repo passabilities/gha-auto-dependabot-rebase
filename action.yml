@@ -4,6 +4,12 @@ description: Github Action to automatically request dependabot rebases
 branding:
   icon: box
   color: blue
+inputs:
+  command:
+    required: false
+    type: string
+    default: rebase
+
 runs:
   using: 'node12'
   main: 'dist/main.cjs'
