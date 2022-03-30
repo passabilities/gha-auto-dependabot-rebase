@@ -32245,9 +32245,20 @@ export type Resolvers<ContextType = any> = {
 
 
 
-export const AddCommentToPr = gql`
-    mutation AddCommentToPr($pullRequestId: ID!) {
+export const AddRebaseCommentToPr = gql`
+    mutation AddRebaseCommentToPr($pullRequestId: ID!) {
   addComment(input: {subjectId: $pullRequestId, body: "@dependabot rebase"}) {
+    commentEdge {
+      node {
+        id
+      }
+    }
+  }
+}
+    `;
+export const AddRecreateCommentToPr = gql`
+    mutation AddRecreateCommentToPr($pullRequestId: ID!) {
+  addComment(input: {subjectId: $pullRequestId, body: "@dependabot recreate"}) {
     commentEdge {
       node {
         id
@@ -32275,12 +32286,19 @@ export const GetPullRequests = gql`
   }
 }
     `;
-export type AddCommentToPrMutationVariables = Exact<{
+export type AddRebaseCommentToPrMutationVariables = Exact<{
   pullRequestId: Scalars['ID'];
 }>;
 
 
-export type AddCommentToPrMutation = { __typename?: 'Mutation', addComment?: { __typename?: 'AddCommentPayload', commentEdge?: { __typename?: 'IssueCommentEdge', node?: { __typename?: 'IssueComment', id: string } | null | undefined } | null | undefined } | null | undefined };
+export type AddRebaseCommentToPrMutation = { __typename?: 'Mutation', addComment?: { __typename?: 'AddCommentPayload', commentEdge?: { __typename?: 'IssueCommentEdge', node?: { __typename?: 'IssueComment', id: string } | null | undefined } | null | undefined } | null | undefined };
+
+export type AddRecreateCommentToPrMutationVariables = Exact<{
+  pullRequestId: Scalars['ID'];
+}>;
+
+
+export type AddRecreateCommentToPrMutation = { __typename?: 'Mutation', addComment?: { __typename?: 'AddCommentPayload', commentEdge?: { __typename?: 'IssueCommentEdge', node?: { __typename?: 'IssueComment', id: string } | null | undefined } | null | undefined } | null | undefined };
 
 export type GetPullRequestsQueryVariables = Exact<{
   owner: Scalars['String'];
